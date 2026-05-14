@@ -146,6 +146,7 @@
     display: grid;
     grid-template-columns: 2fr 1.5fr 1fr auto;
     gap: 12px;
+    align-items: end;
   }
 
   .field {
@@ -161,7 +162,7 @@
     letter-spacing: 0.08em;
   }
 
-  input, select {
+  input, select, textarea {
     background: var(--bg);
     border: 1px solid var(--border);
     color: var(--text);
@@ -172,12 +173,18 @@
     transition: border-color 0.15s, background 0.15s;
     width: 100%;
   }
-  input:focus, select:focus {
+  textarea {
+    resize: vertical;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--accent-dim);
     background: var(--bg-card);
   }
-  input::placeholder { color: var(--text-faint); }
+  input::placeholder, textarea::placeholder { color: var(--text-faint); }
 
   .btn {
     background: var(--accent);
@@ -322,6 +329,153 @@
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.2;
+  }
+
+  /* SCORE BADGE */
+  .score-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--bg);
+    border: 2px solid var(--border-strong);
+    color: var(--text);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 13px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .score-badge.tier-hot { background: var(--accent); color: #000; border-color: var(--accent); }
+  .score-badge.tier-warm { background: var(--warn); color: #000; border-color: var(--warn); }
+  .score-badge.tier-cool { background: var(--bg); color: var(--text-dim); border-color: var(--border-strong); }
+  .score-badge.tier-cold { background: var(--bg); color: var(--text-faint); border-color: var(--border); }
+
+  /* SORT SELECTOR */
+  .sort-select {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* SCRIPT PANEL */
+  .script-panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .script-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .script-header:hover { background: var(--bg-hover); }
+  .script-header .title {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .script-header .title::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .script-toggle {
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    transition: transform 0.2s;
+  }
+  .script-panel.open .script-toggle { transform: rotate(180deg); }
+  .script-body {
+    display: none;
+    padding: 0 20px 20px;
+  }
+  .script-panel.open .script-body { display: block; }
+  .script-body .hint {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .script-body .hint code {
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .script-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 120px;
+    resize: vertical;
+  }
+  .script-textarea:focus { outline: none; border-color: var(--accent-dim); }
+
+  /* PER-LEAD SCRIPT */
+  .lead-script {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 5px;
+    padding: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+    max-height: 140px;
+    overflow-y: auto;
+    cursor: pointer;
+    position: relative;
+  }
+  .lead-script:hover { background: var(--bg-hover); }
+  .lead-script .copy-hint {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 9px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .lead-script.empty {
+    color: var(--text-faint);
+    border-left-color: var(--border);
+    font-style: italic;
   }
 
   .lead-meta {
@@ -582,12 +736,12 @@
 
     <div class="search-grid">
       <div class="field">
-        <label>Location</label>
-        <input id="loc" type="text" placeholder="Phoenix, AZ  ·  85001  ·  Downtown Tucson" />
+        <label>Location(s) — one per line for bulk</label>
+        <textarea id="loc" rows="2" placeholder="Phoenix, AZ&#10;85016&#10;Tempe, AZ"></textarea>
       </div>
       <div class="field">
-        <label>Business Type / Keyword</label>
-        <input id="kw" type="text" placeholder="restaurants, salons, plumbers, dentists..." />
+        <label>Business Type (optional — blank = all)</label>
+        <input id="kw" type="text" placeholder="Leave blank for ALL businesses, or filter: restaurants, salons..." />
       </div>
       <div class="field">
         <label>Radius (meters)</label>
@@ -604,6 +758,31 @@
     </div>
   </section>
 
+  <section class="script-panel" id="scriptPanel">
+    <div class="script-header" onclick="toggleScript()">
+      <div class="title">Call Script Template</div>
+      <span class="script-toggle">▼</span>
+    </div>
+    <div class="script-body">
+      <p class="hint">
+        Customize once — auto-fills per lead. Available variables:
+        <code>{{name}}</code> <code>{{category}}</code> <code>{{address}}</code> <code>{{phone}}</code> <code>{{rating}}</code> <code>{{city}}</code>
+      </p>
+      <textarea class="script-textarea" id="scriptText" placeholder="Hi, is this the owner of {{name}}?
+
+My name is [YOUR NAME], I run a web design business locally and was browsing for {{category}} in the area. I noticed {{name}} doesn't have a website yet — is that something you've been thinking about?
+
+[PAUSE FOR RESPONSE]
+
+The reason I ask is most of my clients in your industry see a real bump in calls once they're showing up properly in Google search. I'd love to put together a free mockup of what your site could look like — no pressure. Would you have 10 minutes this week to chat?
+
+— OBJECTIONS —
+&quot;Not interested&quot; → Totally understand. Can I send you a quick example of what I built for [SIMILAR BUSINESS] so you have it for later?
+&quot;Too expensive&quot; → I'd love to hear what budget would work — I have packages starting at [PRICE].
+&quot;I use Facebook&quot; → Facebook is great, but 75% of customers Google before they visit. Mind if I send you a one-pager on what they're missing?"></textarea>
+    </div>
+  </section>
+
   <div class="filter-bar">
     <div class="filter-tabs">
       <button class="tab active" data-filter="all" onclick="setFilter('all')">All <span class="count" id="ct-all">0</span></button>
@@ -613,6 +792,13 @@
       <button class="tab" data-filter="not-interested" onclick="setFilter('not-interested')">Not Interested <span class="count" id="ct-notint">0</span></button>
     </div>
     <div class="filter-actions">
+      <select class="sort-select" id="sortBy" onchange="setSort(this.value)">
+        <option value="score">Sort: Score (Hot First)</option>
+        <option value="newest">Sort: Newest</option>
+        <option value="rating">Sort: Rating</option>
+        <option value="reviews">Sort: Most Reviews</option>
+        <option value="name">Sort: Name (A-Z)</option>
+      </select>
       <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Export CSV</button>
       <button class="btn btn-ghost btn-sm" onclick="clearAll()">Clear All</button>
     </div>
@@ -662,13 +848,89 @@
   // ============ STATE ============
   let leads = JSON.parse(localStorage.getItem('signal_leads') || '[]');
   let apiKey = localStorage.getItem('signal_apikey') || '';
+  let scriptTemplate = localStorage.getItem('signal_script') || '';
   let currentFilter = 'all';
+  let currentSort = localStorage.getItem('signal_sort') || 'score';
 
   // ============ INIT ============
   if (!apiKey) {
     setTimeout(() => openSettings(), 300);
   }
+  // Load saved script
+  const scriptEl = document.getElementById('scriptText');
+  if (scriptTemplate) scriptEl.value = scriptTemplate;
+  scriptEl.addEventListener('input', () => {
+    scriptTemplate = scriptEl.value;
+    localStorage.setItem('signal_script', scriptTemplate);
+    render();
+  });
+  // Set sort dropdown
+  document.getElementById('sortBy').value = currentSort;
   render();
+
+  // ============ SCRIPT PANEL ============
+  function toggleScript() {
+    document.getElementById('scriptPanel').classList.toggle('open');
+  }
+
+  function fillScript(lead) {
+    if (!scriptTemplate.trim()) return '';
+    const city = (lead.address || '').split(',').slice(-3, -2)[0]?.trim() || '';
+    return scriptTemplate
+      .replace(/\{\{name\}\}/g, lead.name || '')
+      .replace(/\{\{category\}\}/g, lead.category || 'business')
+      .replace(/\{\{address\}\}/g, lead.address || '')
+      .replace(/\{\{phone\}\}/g, lead.phone || '')
+      .replace(/\{\{rating\}\}/g, lead.rating ? lead.rating.toFixed(1) : 'N/A')
+      .replace(/\{\{city\}\}/g, city);
+  }
+
+  function copyScript(id) {
+    const lead = leads.find(l => l.id === id);
+    if (!lead) return;
+    const text = fillScript(lead);
+    if (!text) { toast('Add a script template above first', 'error'); return; }
+    navigator.clipboard.writeText(text).then(() => toast('Script copied to clipboard', 'success'));
+  }
+
+  function setSort(s) {
+    currentSort = s;
+    localStorage.setItem('signal_sort', s);
+    render();
+  }
+
+  // ============ LEAD SCORING ============
+  // Score 0-100 based on signals that indicate a good lead:
+  // - Has a phone (needed to call them) — HEAVY
+  // - High rating + many reviews = established business with money
+  // - Has photos = engaged enough to set up Google profile partially
+  // - Has hours = real operating business
+  function scoreLead(l) {
+    let score = 0;
+    // Phone: critical for cold calling
+    if (l.phone) score += 30;
+    // Rating quality (0-25 points)
+    if (l.rating) {
+      score += Math.min(25, (l.rating - 3) * 12.5); // 3.0=0, 4.0=12.5, 5.0=25
+    }
+    // Review count = business maturity (0-25 points)
+    if (l.ratingCount) {
+      // 10 reviews = 5pts, 50 = 15pts, 200+ = 25pts
+      score += Math.min(25, Math.log10(l.ratingCount + 1) * 11);
+    }
+    // Has photo = somewhat engaged with online presence
+    if (l.photo) score += 10;
+    // Has hours = operational business
+    if (l.hours && l.hours.length) score += 10;
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
+  function scoreTier(score) {
+    if (score >= 75) return 'hot';
+    if (score >= 55) return 'warm';
+    if (score >= 35) return 'cool';
+    return 'cold';
+  }
 
   // ============ SETTINGS ============
   function openSettings() {
@@ -691,101 +953,142 @@
   async function runSearch() {
     if (!apiKey) { openSettings(); toast('Add your API key first', 'error'); return; }
 
-    const location = document.getElementById('loc').value.trim();
+    const locationsRaw = document.getElementById('loc').value.trim();
     const keyword = document.getElementById('kw').value.trim();
     const radius = parseInt(document.getElementById('radius').value);
 
-    if (!location || !keyword) {
-      toast('Enter both location and business type', 'error');
+    if (!locationsRaw) {
+      toast('Enter at least one location to search', 'error');
       return;
     }
+
+    // Parse multiple locations (one per line)
+    const locations = locationsRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+    // If no keyword: sweep many categories. If keyword: just that one.
+    const BROAD_CATEGORIES = [
+      'restaurants', 'cafes', 'bars', 'salons', 'barber shops', 'nail salons',
+      'auto repair', 'car wash', 'plumbers', 'electricians', 'HVAC',
+      'landscapers', 'cleaners', 'dentists', 'chiropractors', 'massage',
+      'gyms', 'yoga studios', 'pet groomers', 'veterinarians',
+      'florists', 'jewelers', 'tailors', 'shoe repair', 'dry cleaners',
+      'tax preparers', 'real estate agents', 'insurance agents',
+      'contractors', 'roofers', 'painters', 'movers',
+      'tattoo parlors', 'photographers', 'caterers', 'bakeries',
+      'butchers', 'mechanics', 'tire shops', 'locksmiths',
+      'daycare', 'tutoring', 'music lessons', 'driving schools'
+    ];
+    const queries = keyword ? [keyword] : BROAD_CATEGORIES;
 
     const btn = document.getElementById('searchBtn');
     btn.disabled = true;
     btn.textContent = 'Searching...';
-    document.getElementById('leadContainer').innerHTML = '<div class="loading">Geocoding location</div>';
+
+    let totalFound = 0;
+    let totalNoWebsite = 0;
+    let totalNew = 0;
+    const seenIdsGlobal = new Set(leads.map(l => l.id));
 
     try {
-      // Step 1: Geocode the location to lat/lng using Places API text search
-      const geocodeUrl = `https://places.googleapis.com/v1/places:searchText`;
-      const geocodeRes = await fetch(geocodeUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'places.location,places.displayName'
-        },
-        body: JSON.stringify({ textQuery: location, maxResultCount: 1 })
-      });
+      // Loop through each location
+      for (let locIdx = 0; locIdx < locations.length; locIdx++) {
+        const location = locations[locIdx];
+        document.getElementById('leadContainer').innerHTML =
+          `<div class="loading">Location ${locIdx + 1}/${locations.length} · ${escapeHtml(location)} · Geocoding</div>`;
 
-      if (!geocodeRes.ok) {
-        const err = await geocodeRes.text();
-        throw new Error(`Location lookup failed: ${err}`);
-      }
-      const geoData = await geocodeRes.json();
-      if (!geoData.places || !geoData.places.length) {
-        throw new Error('Could not find that location');
-      }
-      const center = geoData.places[0].location;
-
-      document.getElementById('leadContainer').innerHTML = '<div class="loading">Searching nearby businesses</div>';
-
-      // Step 2: Nearby/text search for the business type
-      const searchRes = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.primaryTypeDisplayName,places.types,places.regularOpeningHours,places.photos,places.googleMapsUri,places.businessStatus'
-        },
-        body: JSON.stringify({
-          textQuery: keyword,
-          locationBias: {
-            circle: {
-              center: { latitude: center.latitude, longitude: center.longitude },
-              radius: radius
-            }
+        // Geocode this location
+        const geocodeRes = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': apiKey,
+            'X-Goog-FieldMask': 'places.location,places.displayName'
           },
-          maxResultCount: 20
-        })
-      });
+          body: JSON.stringify({ textQuery: location, maxResultCount: 1 })
+        });
 
-      if (!searchRes.ok) {
-        const err = await searchRes.text();
-        throw new Error(`Search failed: ${err}`);
-      }
-      const searchData = await searchRes.json();
-      const all = searchData.places || [];
-
-      // Filter: only businesses with NO website
-      const noWebsite = all.filter(p => !p.websiteUri && p.businessStatus !== 'CLOSED_PERMANENTLY');
-
-      // Merge into existing leads (skip duplicates by id)
-      let newCount = 0;
-      noWebsite.forEach(p => {
-        if (!leads.find(l => l.id === p.id)) {
-          leads.push({
-            id: p.id,
-            name: p.displayName?.text || 'Unknown',
-            address: p.formattedAddress || '',
-            phone: p.nationalPhoneNumber || p.internationalPhoneNumber || '',
-            category: p.primaryTypeDisplayName?.text || (p.types && p.types[0]) || '',
-            rating: p.rating || null,
-            ratingCount: p.userRatingCount || 0,
-            hours: p.regularOpeningHours?.weekdayDescriptions || [],
-            photo: p.photos && p.photos[0] ? `https://places.googleapis.com/v1/${p.photos[0].name}/media?maxHeightPx=240&maxWidthPx=480&key=${apiKey}` : null,
-            mapsUrl: p.googleMapsUri || '',
-            status: 'new',
-            notes: '',
-            addedAt: Date.now()
-          });
-          newCount++;
+        if (!geocodeRes.ok) {
+          console.warn(`Geocode failed for "${location}"`);
+          continue;
         }
-      });
+        const geoData = await geocodeRes.json();
+        if (!geoData.places || !geoData.places.length) {
+          console.warn(`No location found for "${location}"`);
+          continue;
+        }
+        const center = geoData.places[0].location;
+
+        // Run all queries for this location
+        for (let i = 0; i < queries.length; i++) {
+          const q = queries[i];
+          document.getElementById('leadContainer').innerHTML =
+            `<div class="loading">Loc ${locIdx + 1}/${locations.length} · ${escapeHtml(location)} · Query ${i + 1}/${queries.length} · ${escapeHtml(q)}</div>`;
+
+          try {
+            const searchRes = await fetch(`https://places.googleapis.com/v1/places:searchText`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': apiKey,
+                'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.primaryTypeDisplayName,places.types,places.regularOpeningHours,places.photos,places.googleMapsUri,places.businessStatus'
+              },
+              body: JSON.stringify({
+                textQuery: q,
+                locationBias: {
+                  circle: {
+                    center: { latitude: center.latitude, longitude: center.longitude },
+                    radius: radius
+                  }
+                },
+                maxResultCount: 20
+              })
+            });
+
+            if (!searchRes.ok) {
+              console.warn(`Search failed for "${q}" in "${location}":`, await searchRes.text());
+              continue;
+            }
+            const searchData = await searchRes.json();
+            const places = searchData.places || [];
+            totalFound += places.length;
+
+            // Filter to no-website and add to leads
+            places.forEach(p => {
+              if (p.websiteUri) return;
+              if (p.businessStatus === 'CLOSED_PERMANENTLY') return;
+              totalNoWebsite++;
+              if (seenIdsGlobal.has(p.id)) return;
+              seenIdsGlobal.add(p.id);
+
+              const lead = {
+                id: p.id,
+                name: p.displayName?.text || 'Unknown',
+                address: p.formattedAddress || '',
+                phone: p.nationalPhoneNumber || p.internationalPhoneNumber || '',
+                category: p.primaryTypeDisplayName?.text || (p.types && p.types[0]) || '',
+                rating: p.rating || null,
+                ratingCount: p.userRatingCount || 0,
+                hours: p.regularOpeningHours?.weekdayDescriptions || [],
+                photo: p.photos && p.photos[0] ? `https://places.googleapis.com/v1/${p.photos[0].name}/media?maxHeightPx=240&maxWidthPx=480&key=${apiKey}` : null,
+                mapsUrl: p.googleMapsUri || '',
+                status: 'new',
+                notes: '',
+                searchLocation: location,
+                addedAt: Date.now()
+              };
+              lead.score = scoreLead(lead);
+              leads.push(lead);
+              totalNew++;
+            });
+          } catch (err) {
+            console.warn(`Error searching "${q}":`, err);
+          }
+        }
+      }
 
       save();
       render();
-      toast(`Found ${all.length} businesses · ${noWebsite.length} without websites · ${newCount} new`, 'success');
+      toast(`Searched ${locations.length} location(s) · ${totalFound} businesses scanned · ${totalNoWebsite} no-website · ${totalNew} new leads added`, 'success');
 
     } catch (e) {
       console.error(e);
@@ -833,13 +1136,29 @@
       return;
     }
 
-    // Sort: new first, then by addedAt
+    // Sort based on currentSort
     filtered.sort((a, b) => {
-      const order = { 'new': 0, 'called': 1, 'interested': -1, 'not-interested': 2 };
-      const oa = order[a.status] ?? 1;
-      const ob = order[b.status] ?? 1;
-      if (oa !== ob) return oa - ob;
-      return b.addedAt - a.addedAt;
+      // Pinned: always push "not-interested" to bottom
+      if (a.status === 'not-interested' && b.status !== 'not-interested') return 1;
+      if (b.status === 'not-interested' && a.status !== 'not-interested') return -1;
+
+      // Pinned: "interested" always to top
+      if (a.status === 'interested' && b.status !== 'interested') return -1;
+      if (b.status === 'interested' && a.status !== 'interested') return 1;
+
+      switch (currentSort) {
+        case 'score':
+          return (b.score || 0) - (a.score || 0);
+        case 'rating':
+          return (b.rating || 0) - (a.rating || 0);
+        case 'reviews':
+          return (b.ratingCount || 0) - (a.ratingCount || 0);
+        case 'name':
+          return (a.name || '').localeCompare(b.name || '');
+        case 'newest':
+        default:
+          return b.addedAt - a.addedAt;
+      }
     });
 
     container.innerHTML = `<div class="lead-grid">${filtered.map(renderCard).join('')}</div>`;
@@ -873,8 +1192,23 @@
       ? `<span class="chip">${escapeHtml(l.category)}</span>`
       : '';
 
+    // Score badge
+    const score = l.score ?? scoreLead(l);
+    const tier = scoreTier(score);
+    const scoreBadge = `<div class="score-badge tier-${tier}" title="Lead score: ${score}/100">${score}</div>`;
+
+    // Per-lead script
+    const filledScript = fillScript(l);
+    const scriptHtml = scriptTemplate.trim()
+      ? `<div class="lead-script" onclick="copyScript('${l.id}')" title="Click to copy">
+           <span class="copy-hint">Click to copy</span>
+           ${escapeHtml(filledScript)}
+         </div>`
+      : '';
+
     return `
       <article class="lead-card" data-status="${l.status}">
+        ${scoreBadge}
         ${photoHtml}
         <div>
           <h3 class="lead-name">${escapeHtml(l.name)}</h3>
@@ -895,6 +1229,7 @@
             <a href="${escapeHtml(l.mapsUrl)}" target="_blank">View on Google Maps</a>
           </div>` : ''}
         </div>
+        ${scriptHtml}
         <textarea class="lead-notes" placeholder="Notes — call outcomes, follow-up dates, decision-maker name..." onchange="updateNote('${l.id}', this.value)">${escapeHtml(l.notes)}</textarea>
         <div class="lead-actions">
           <button class="action-btn ${l.status === 'called' ? 'active-called' : ''}" onclick="setStatus('${l.id}', 'called')">Called</button>
@@ -935,11 +1270,12 @@
     const filtered = currentFilter === 'all' ? leads : leads.filter(l => l.status === currentFilter);
     if (!filtered.length) { toast('Nothing in this view to export', 'error'); return; }
 
-    const headers = ['Name', 'Phone', 'Address', 'Category', 'Rating', 'Rating Count', 'Status', 'Notes', 'Google Maps URL'];
+    const headers = ['Name', 'Phone', 'Address', 'Category', 'Rating', 'Rating Count', 'Score', 'Status', 'Notes', 'Search Location', 'Google Maps URL'];
     const rows = filtered.map(l => [
       l.name, l.phone, l.address, l.category,
       l.rating || '', l.ratingCount || '',
-      l.status, l.notes, l.mapsUrl
+      l.score ?? scoreLead(l),
+      l.status, l.notes, l.searchLocation || '', l.mapsUrl
     ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
 
     const csv = [headers.join(','), ...rows].join('\n');
@@ -968,12 +1304,23 @@
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
   }
 
-  // Allow Enter to trigger search
-  ['loc', 'kw'].forEach(id => {
-    document.getElementById(id).addEventListener('keypress', e => {
-      if (e.key === 'Enter') runSearch();
-    });
+  // Allow Enter on keyword to trigger search, Ctrl+Enter on locations
+  document.getElementById('kw').addEventListener('keypress', e => {
+    if (e.key === 'Enter') runSearch();
   });
+  document.getElementById('loc').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      runSearch();
+    }
+  });
+
+  // Backfill score on any leads from before scoring was added
+  let backfilled = false;
+  leads.forEach(l => {
+    if (l.score === undefined) { l.score = scoreLead(l); backfilled = true; }
+  });
+  if (backfilled) { save(); render(); }
 </script>
 
 </body>
